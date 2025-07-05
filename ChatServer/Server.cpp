@@ -89,7 +89,7 @@ void Server::SetServerAddress(int Port)
 
 	AllowThread = std::thread(std::bind(&Server::AllowClient,this));
 
-	std::cout << "Server Open"<<std::endl;
+	std::cout << "Chat Server Open"<<std::endl << std::endl;
 }
 
 void Server::RegisterSocket( SOCKET ClientSocket, std::string_view Name)
@@ -114,16 +114,16 @@ void Server::ReceiveMessage(SOCKET ClientSocket)
 			continue;
 		}
 
-		std::string Temp;
-		Temp = mapUserList[ClientSocket] + " : ";
-		Temp.append(strBuffer, PacketSize);
+		std::string strTemp;
+		strTemp = mapUserList[ClientSocket] + " : ";
+		strTemp.append(strBuffer, PacketSize);
 
-		queMessage.push(Temp);
+		queMessage.push(strTemp);
 	}
 }
 
 
-void Server::ReceiveMsg()
+void Server::SendAll()
 {
 	while (!queMessage.empty())
 	{

@@ -21,19 +21,11 @@ protected:
 	virtual void DestroySocket();
 	virtual void Init();
 
-	std::string_view GetRecvPacket()
-	{
-		return strRecvPacket;
-	};
-
 
 	WSADATA wsaData = {};
 	SOCKET Socket = INVALID_SOCKET;
 	sockaddr_in Address = {};
 	std::string strAccessName = "";
-	std::queue<std::string> queMessage;
-	
-	std::string strRecvPacket;
 	
 private:
 };

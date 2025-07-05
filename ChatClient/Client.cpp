@@ -37,12 +37,11 @@ bool Client::AccessServer()
 	char strBuffer[PACKETSIZE] = {};
 	int PacketSize = recv(Socket, strBuffer, PACKETSIZE, 0);
 
-	strRecvPacket.resize(PacketSize);
-	strRecvPacket.assign(strBuffer, PacketSize);
+	std::string strTemp;
+	strTemp.resize(PacketSize);
+	strTemp.assign(strBuffer, PacketSize);
 
-	std::cout << strRecvPacket << std::endl;
-
-
+	std::cout << strTemp << std::endl;
 
 	RecvThread = std::thread(std::bind(&Client::ReceiveMessage, this));
 
@@ -83,9 +82,10 @@ void Client::ReceiveMessage()
 			continue;
 		}
 
-		strRecvPacket.resize(PacketSize);
-		strRecvPacket.assign(strBuffer, PacketSize);
+		std::string strTemp;
+		strTemp.resize(PacketSize);
+		strTemp.assign(strBuffer, PacketSize);
 
-		std::cout << strRecvPacket << std::endl;
+		std::cout << strTemp << std::endl;
 	}
 }

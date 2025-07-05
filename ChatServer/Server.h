@@ -15,7 +15,7 @@ public:
 		return bServerClose;
 	}
 	void SetServerAddress(int Port = 108);
-	void ReceiveMsg();
+	void SendAll();
 
 protected:
 	void AllowClient();
@@ -26,10 +26,9 @@ protected:
 private:
 	bool bServerClose = false;
 	std::map<SOCKET,std::string> mapUserList;
-	std::thread RecvThread;
-
 	std::map<SOCKET,std::thread*> mapRecvThread;
 
 	std::thread AllowThread;
+	std::queue<std::string> queMessage;
 };
 

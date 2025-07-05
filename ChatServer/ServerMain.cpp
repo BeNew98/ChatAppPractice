@@ -14,7 +14,7 @@ int main()
 
 	while (true)
 	{
-		ServerStart.ReceiveMsg();
+		ServerStart.SendAll();
 	}	
 
 	return 0;
