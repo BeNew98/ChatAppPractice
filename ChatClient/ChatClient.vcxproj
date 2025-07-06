@@ -132,16 +132,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SocketInfo\SocketInfo.vcxproj">
-      <Project>{3233d81e-b616-49ac-902e-ba091e5c00ef}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetworkHelper\NetworkHelper.vcxproj">
+      <Project>{3233d81e-b616-49ac-902e-ba091e5c00ef}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,19 +1,20 @@
 #include "Server.h"
 #include <iostream>
+#include "../NetworkHelper/IocpThreadPool.h"
 
 Server::Server()
 {
 	strAccessName = "Server";
+
+	ThreadPool = new IocpThreadPool();
+	ThreadPool->SetFunction([this](SOCKET Client, std::string_view Msg) {ReceiveMessage(Client, Msg); });
 }
 
 Server::~Server()
 {
 	DestroySocket();
-	for (auto Iter : mapRecvThread)
-	{
-		Iter.second->join();
-		delete Iter.second;
-	}
+
+	delete ThreadPool;
 }
 
 void Server::AllowClient()
@@ -35,22 +36,24 @@ void Server::AllowClient()
 			return;
 		}
 
-		char strBuffer[PACKETSIZE] = {};
+
+		char Buffer[PACKETSIZE] = {};
 
 		int PacketSize = 0;
 		//정보 수신
 		//파라미터 ->클라이언트 소켓 , 버퍼, 버퍼사이즈 , 플래그
-		PacketSize = recv(ClientSocket, strBuffer, PACKETSIZE, 0);
+		PacketSize = recv(ClientSocket, Buffer, PACKETSIZE, 0);
 
-		std::cout << strBuffer << " Access Server" << std::endl;
+		std::cout << Buffer << " Access Server" << std::endl;
 
 		std::string ClientName;
 		ClientName.resize(PacketSize);
-		ClientName.assign(strBuffer, PacketSize);
+		ClientName.assign(Buffer, PacketSize);
+
+		mapUserList[ClientSocket] = ClientName;
 
 		//접속 완료 메세지 전송
 		//파라미터 -> 클라이언트 소켓, 버퍼, 버퍼사이즈, 플래그
-
 		std::string strMessage = ClientName + " : Welcome Chat Server";
 		Error = send(ClientSocket, strMessage.c_str(), static_cast<int>(strMessage.size()), 0);
 
@@ -62,7 +65,7 @@ void Server::AllowClient()
 			return;
 		}
 
-		RegisterSocket(ClientSocket, ClientName);
+		ThreadPool->RegisterIocp(ClientSocket);
 	}
 }
 
@@ -84,56 +87,47 @@ void Server::SetServerAddress(int Port)
 		return;
 	}
 
-	//SOMAXXCONN 최대 연결 승인수
+	//SOMAXXCONN -> 최대 연결 승인수
 	listen(Socket, SOMAXCONN);
 
-	AllowThread = std::thread(std::bind(&Server::AllowClient,this));
+	//스레드에 allowClient를 계속 하게 요청
+	AllowThread = std::thread([&]() {AllowClient(); });
 
-	std::cout << "Chat Server Open"<<std::endl << std::endl;
+	std::cout << "Chat Server Open" << std::endl << std::endl;
 }
 
-void Server::RegisterSocket( SOCKET ClientSocket, std::string_view Name)
+void Server::ReceiveMessage(SOCKET ClientSocket, std::string_view Message)
 {
-	mapUserList[ClientSocket] = Name.data();
+	std::string strTemp;
+	strTemp = mapUserList[ClientSocket] + " : ";
+	strTemp += Message;
 
-	std::thread* NewThread = new std::thread(std::thread(std::bind(&Server::ReceiveMessage, this,ClientSocket)));
-	mapRecvThread[Socket] = NewThread;
+	//임계영역 잠궈서 push
+	std::unique_lock<std::mutex> UniqueLock(MsgQueueMutex);
+	queMessage.push(strTemp);
+	UniqueLock.unlock();
 }
-
-void Server::ReceiveMessage(SOCKET ClientSocket)
-{
-	while (true)
-	{
-		char strBuffer[PACKETSIZE] = {};
-
-		int PacketSize = 0;
-		PacketSize = recv(ClientSocket, strBuffer, PACKETSIZE, 0);
-
-		if (PacketSize == -1)
-		{
-			continue;
-		}
-
-		std::string strTemp;
-		strTemp = mapUserList[ClientSocket] + " : ";
-		strTemp.append(strBuffer, PacketSize);
-
-		queMessage.push(strTemp);
-	}
-}
-
 
 void Server::SendAll()
 {
+	//임계영역 잠궈서 pop
+	std::unique_lock<std::mutex> UniqueLock(MsgQueueMutex);
 	while (!queMessage.empty())
 	{
+		std::string strSendMsg = queMessage.front();
+		queMessage.pop();
+
+		UniqueLock.unlock();
+
 		for (auto SendIter : mapUserList)
-		{			
-			SendMsg(queMessage.front(), SendIter.first);
+		{
+			SendMsg(strSendMsg, SendIter.first);
 		}
 
-		std::cout << queMessage.front() << std::endl;
-		queMessage.pop();
+		std::cout << strSendMsg << std::endl;
+
+		//while문 돌거니까 다시 lock
+		UniqueLock.lock();
 	}
 
 }

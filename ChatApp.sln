@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChatClient", "ChatClient\Char.vcxproj", "{A4DA73D8-3044-4B30-A8F5-7A0035AC8BEE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChatClient", "ChatClient\ChatClient.vcxproj", "{A4DA73D8-3044-4B30-A8F5-7A0035AC8BEE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChatServer", "ChatServer\ChatServer.vcxproj", "{7E3FF61A-D39F-4708-9C5E-25D7B162F042}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketInfo", "SocketInfo\SocketInfo.vcxproj", "{3233D81E-B616-49AC-902E-BA091E5C00EF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkHelper", "NetworkHelper\NetworkHelper.vcxproj", "{3233D81E-B616-49AC-902E-BA091E5C00EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,8 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="SocketInfo.cpp" />
+    <ClCompile Include="IocpThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SocketInfo.h" />
+    <ClInclude Include="IocpThreadPool.h" />
   </ItemGroup>
 </Project>

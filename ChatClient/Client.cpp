@@ -43,7 +43,7 @@ bool Client::AccessServer()
 
 	std::cout << strTemp << std::endl;
 
-	RecvThread = std::thread(std::bind(&Client::ReceiveMessage, this));
+	RecvThread = std::thread([&]() {ReceiveMessage(); });
 
 	return true;
 }

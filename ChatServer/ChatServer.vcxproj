@@ -26,7 +26,7 @@
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SocketInfo\SocketInfo.vcxproj">
+    <ProjectReference Include="..\NetworkHelper\NetworkHelper.vcxproj">
       <Project>{3233d81e-b616-49ac-902e-ba091e5c00ef}</Project>
     </ProjectReference>
   </ItemGroup>

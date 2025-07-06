@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../SocketInfo/SocketInfo.h"
+#include "../NetworkHelper/SocketInfo.h"
 
 class Client : SocketInfo
 {

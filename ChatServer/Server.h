@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../SocketInfo/SocketInfo.h"
+#include "../NetworkHelper/SocketInfo.h"
 #include "map"
+#include <mutex>
 
 
 class Server : SocketInfo
@@ -19,16 +20,17 @@ public:
 
 protected:
 	void AllowClient();
-	void RegisterSocket(SOCKET ClientSocket, std::string_view Name);
-
-	void ReceiveMessage(SOCKET ClientSocket);
+	void ReceiveMessage(SOCKET ClientSocket, std::string_view Message);
 
 private:
 	bool bServerClose = false;
-	std::map<SOCKET,std::string> mapUserList;
-	std::map<SOCKET,std::thread*> mapRecvThread;
+	std::map<SOCKET, std::string> mapUserList;
 
+	std::mutex MsgQueueMutex;
 	std::thread AllowThread;
 	std::queue<std::string> queMessage;
+
+	class IocpThreadPool* ThreadPool;
+	
 };
 

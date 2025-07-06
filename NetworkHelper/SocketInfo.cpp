@@ -12,7 +12,7 @@ SocketInfo::~SocketInfo()
 
 void SocketInfo::SendMsg(std::string_view Msg, SOCKET socket)
 {
-	if (SOCKET_ERROR == send(socket, Msg.data(), Msg.size(), 0))
+	if (SOCKET_ERROR == send(socket, Msg.data(), static_cast<int>(Msg.size()), 0))
 	{
 		return;
 	}
@@ -46,7 +46,9 @@ void SocketInfo::Init()
 
 	//리슨 소켓 생성
 	//파라미터 -> ip4 , 양방향 통신 , tcp
-	Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	//Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+	Socket = WSASocketW(AF_INET, SOCK_STREAM, IPPROTO_TCP,nullptr,0,WSA_FLAG_OVERLAPPED);
 
 	if (Socket == INVALID_SOCKET)
 	{
