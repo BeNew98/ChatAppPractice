@@ -61,7 +61,7 @@ void IocpThreadPool::RegisterIocp(SOCKET client)
 
 void IocpThreadPool::RunThread()
 {
-	while (true)
+	while (!bStopAll)
 	{
 		DWORD PacketSize = 0;
 		ULONG_PTR Key = 0;

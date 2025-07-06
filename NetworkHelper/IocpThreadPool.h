@@ -32,6 +32,7 @@ protected:
 private:
 
 	int ThreadSize = 0;
+	bool bStopAll = false;
 	std::vector<std::thread> vecThreadPool;
 	std::function<void(SOCKET ClientSocket, std::string_view Message)> Function;
 	std::map<SOCKET, IOContext*> mapIoContext;
