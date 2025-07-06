@@ -8,6 +8,11 @@ IocpThreadPool::IocpThreadPool()
 
 IocpThreadPool::~IocpThreadPool()
 {
+	bStopAll = true;
+	for (size_t i = 0; i < ThreadSize; i++)
+	{
+		vecThreadPool[i].join();
+	}
 }
 
 void IocpThreadPool::Init()
