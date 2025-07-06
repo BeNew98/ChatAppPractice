@@ -12,8 +12,10 @@ IocpThreadPool::~IocpThreadPool()
 
 void IocpThreadPool::Init()
 {
+	//코어 개수 *2 +1;
 	ThreadSize = std::thread::hardware_concurrency() * 2 + 1;
 
+	//iocp핸들 생성
 	IocpHandle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, nullptr, 0, ThreadSize);
 
 	vecThreadPool.resize(ThreadSize);
