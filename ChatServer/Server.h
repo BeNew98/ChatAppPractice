@@ -26,10 +26,10 @@ private:
 	bool bServerClose = false;
 	std::map<SOCKET, std::string> mapUserList;
 
-	std::mutex MsgQueueMutex;
-	std::thread AllowThread;
 	std::queue<std::string> queMessage;
 
+	std::mutex MsgQueueMutex;
+	std::thread AllowThread;
 	class IocpThreadPool* ThreadPool;
 	
 };

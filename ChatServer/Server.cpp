@@ -90,7 +90,7 @@ void Server::SetServerAddress(int Port)
 	//SOMAXXCONN -> 최대 연결 승인수
 	listen(Socket, SOMAXCONN);
 
-	//스레드에 allowClient를 계속 하게 요청
+	//스레드에 AllowClient를 계속 하게 요청
 	AllowThread = std::thread([&]() {AllowClient(); });
 
 	std::cout << "Chat Server Open" << std::endl << std::endl;
